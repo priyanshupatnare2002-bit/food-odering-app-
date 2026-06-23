@@ -45,23 +45,16 @@ public class InitialDataSeeder implements CommandLineRunner {
 	}
 
 	private MealType mealType(String typeName, String description, String imageName) {
-		return mealTypeRepository.findByTypeName(typeName)
-				.orElseGet(() -> {
-					MealType mealType = new MealType();
-					mealType.setTypeName(typeName);
-					mealType.setDescription(description);
-					mealType.setImageName(imageName);
-					mealType.setImage(readImage(imageName));
-					return mealTypeRepository.save(mealType);
-				});
+		MealType mealType = mealTypeRepository.findByTypeName(typeName).orElseGet(MealType::new);
+		mealType.setTypeName(typeName);
+		mealType.setDescription(description);
+		mealType.setImageName(imageName);
+		mealType.setImage(readImage(imageName));
+		return mealTypeRepository.save(mealType);
 	}
 
 	private void meal(String name, int price, MealType mealType, String description, String imageName) {
-		if (mealRepository.existsByName(name)) {
-			return;
-		}
-
-		Meal meal = new Meal();
+		Meal meal = mealRepository.findByName(name).orElseGet(Meal::new);
 		meal.setName(name);
 		meal.setPrice(price);
 		meal.setMealType(mealType);
