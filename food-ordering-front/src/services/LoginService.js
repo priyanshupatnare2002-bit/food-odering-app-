@@ -1,14 +1,15 @@
 import axios from "axios";
 import TokenService from "./TokenService";
+import API_BASE_URL from "./ApiConfig";
 
 class LoginService{
     login(loginParams){
-        return axios.post("http://localhost:8080/api/login", loginParams);
+        return axios.post(`${API_BASE_URL}/api/login`, loginParams);
     }
 
     logout(){
         TokenService.setTokenInHeader();
-        return axios.get("http://localhost:8080/api/logout");
+        return axios.get(`${API_BASE_URL}/api/logout`);
     }
 }
 
